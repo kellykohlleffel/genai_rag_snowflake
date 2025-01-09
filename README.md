@@ -145,16 +145,16 @@ import time
 
 # Change this list as needed to add/remove model capabilities.
 MODELS = [
-    "reka-flash",
     "llama3.2-3b",
-    "llama3.1-8b",
-    "jamba-1.5-large",
-    "llama3.1-70b",
-    "llama3.1-405b",
-    "mistral-7b",
-    "mixtral-8x7b",
+    "claude-3-5-sonnet",
     "mistral-large2",
-    "snowflake-arctic",
+    "llama3.1-8b",
+    "llama3.1-405b",
+    "llama3.1-70b",
+    "mistral-7b",
+    "jamba-1.5-large",
+    "mixtral-8x7b",
+    "reka-flash",
     "gemma-7b"
 ]
 
