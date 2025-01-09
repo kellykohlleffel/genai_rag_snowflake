@@ -416,13 +416,64 @@ if __name__ == "__main__":
     
     * After each run, inspect the **token count** at the bottom of the response (see image below). Note the differences in token size when RAG is turned off and on as well as the size and complexity of the prompt. Review the [Snowflake model restrictions](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#model-restrictions) and [cost considerations](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#cost-considerations) to understand more about these models, token inputs, and token costs.
 
-**Example prompt 1** (Note: Kohlleffel Vineyards is a control record that only lives in the PostgreSQL dataset that Fivetran moved into Snowflake)
+## Example prompt 1:
 ```
-Tell me everything you know about kohlleffel vineyards in 6-7 paragraphs. I want to know about their dog and the types of wood that you can select for the fire pits.
+Provide a comprehensive overview of the following winery:
+
+**Winery Name:** Kohlleffel Vineyards
+
+The overview should include:
+
+1. **Basic Information**:
+   - Location, including region and any notable geographical features.
+   - A brief history of the winery (e.g., founding date, founders, or mission).
+   - Specialties in wine production (e.g., types of wine, signature varietals).
+
+2. **Unique Characteristics and Offerings**:
+   - At least 5 unique features, activities, or experiences the winery offers (e.g., BBQs, live music, vineyard tours, wine blending workshops, farm-to-table meals, or pet-friendly events).
+   - Any seasonal or recurring events.
+
+3. **Tasting Room and Tours**:
+   - Details about the tasting room ambiance (e.g., rustic, modern, scenic).
+   - Information about guided tours, tastings, or other experiences.
+
+4. **Hospitality**:
+   - Are there any unique amenities, such as picnic areas, accommodations, or partnerships with nearby attractions?
+   - Are pets or children welcome? Provide details.
+
+5. **Notable Recognition**:
+   - Awards, certifications, or mentions in media.
+
+6. **Pricing**:
+   - Cost range for tastings, tours, or special events.
+
+7. **Insider Tips**:
+   - Recommendations for visitors to make the most of their experience (e.g., best time to visit, popular wines to try, or must-see areas of the property).
+
+Structure the response with clear headings and an inviting tone tailored to wine enthusiasts or travelers. Include any quirky, fun, or unexpected details that make the winery stand out.
 ```
-**Example prompt 2** (Note: Millman Estate is also a control record that only lives in the PostgreSQL dataset that Fivetran moved into Snowflake)
+
+## Example prompt 2: 
+
 ```
-Tell me about kohlleffel vineyards and millman estate. Also, provide me with a 2 day itinerary with a catchy name that includes day 1 stops at kohlleffel vineyards and millman estate. Then on Day 2 I want to visit Continuum Estate and Del Dotto Vineyards. Include information about the dogs at any of the wineries. Also, include recommendations for restaurants and hotels throughout the visit. Also, what types of clothing should I bring for this time of year. Lastly, what will this trip cost me?
+Create a detailed and engaging travel guide for a 2-day wine country getaway, complete with a catchy itinerary name. The trip should include the following winery visits:
+
+- **Day 1:** Kohlleffel Vineyards and Millman Estate.
+- **Day 2:** Continuum Estate and Del Dotto Vineyards.
+
+Please include:
+1. A unique name for this multi-winery trip.
+2. A logical day-by-day itinerary that visits all mentioned wineries, with suggested timing for each activity.
+3. At least 5 unique characteristics or activities at each winery in bulletized format.
+4. Recommended nearby restaurants for lunch and dinner, with brief descriptions of their appeal.
+5. Hotel recommendations for the overnight stay, including why they are a good fit for the trip.
+6. Other complementary activities (e.g., local sights, shopping, or nature walks).
+7. Information about any pet-friendly features or resident dogs at the wineries.
+8. Tips for making the most of the visits (e.g., booking in advance, best times to visit).
+9. Advice on what to wear for this time of year, factoring in weather and winery activities.
+10. Estimated cost of the trip, broken down by day and activity, with assumptions (e.g., group size, transportation type).
+
+Structure your response with clear headings and a well-organized format. Ensure the tone is inviting and tailored to wine enthusiasts or first-time visitors.
 ```
 
 **Control records in the PostgreSQL dataset (for testing RAG)**
