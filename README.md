@@ -169,15 +169,14 @@ def build_layout():
     # Builds the layout for the app side and main panels and return the question from the dynamic text_input control.
     #
 
-
     # Setup the state variables.
-    # Resets text input ID to enable it to be cleared since currently there is no native clear.
-    if 'reset_key' not in st.session_state: 
+    # Ensure `reset_key` is initialized.
+    if 'reset_key' not in st.session_state:
         st.session_state.reset_key = 0
+
     # Holds the list of responses so the user can see changes while selecting other models and settings.
     if 'conversation_state' not in st.session_state:
         st.session_state.conversation_state = []
-
 
     # Build the layout.
     #
@@ -197,9 +196,10 @@ def build_layout():
     st.sidebar.checkbox('Use your Fivetran dataset as context?', key="dataset_context", help="""This turns on RAG where the 
     data replicated by Fivetran and curated in Snowflake will be used to add to the context of the LLM prompt.""")
     if st.button('Reset conversation', key='reset_conversation_button'):
-        st.session_state.conversation_state = []
         st.session_state.reset_key += 1
-        st.experimental_rerun()
+        st.session_state.conversation_state = []
+        # Update query params to trigger reload.
+        st.query_params.clear()
     processing_placeholder = st.empty()
     question = st.text_input("", placeholder=user_question_placeholder, key=f"text_input_{st.session_state.reset_key}", 
                              label_visibility="collapsed")
@@ -213,7 +213,7 @@ def build_layout():
         st.selectbox("Select number of context chunks:", CHUNK_NUMBER, key="num_retrieved_chunks", help="""Adjust based on the 
         expected number of records/chunks of your data to be sent with the prompt before Cortext calls the LLM.""", index=1)
     st.sidebar.caption("""I use **Snowflake Cortex** which provides instant access to industry-leading large language models (LLMs), 
-      including **Snowflake Arctic**, trained by researchers at companies like Mistral, Meta, Google, Reka, and Snowflake.\n\nCortex 
+      including Claude, Llama, and Snowflake Arctic that have been trained by researchers at companies like Anthropic, Meta, Mistral, Google, Reka, and Snowflake.\n\nCortex 
       also offers models that Snowflake has fine-tuned for specific use cases. Since these LLMs are fully hosted and managed by 
       Snowflake, using them requires no setup. My data stays within Snowflake, giving me the performance, scalability, and governance 
       you expect.""")
@@ -227,9 +227,9 @@ def build_layout():
     with caption_col2:
         st.caption("Fivetran, Snowflake, Streamlit, & Cortex")
 
-
     return question
 
+    
 
 def build_prompt (question):
     #
