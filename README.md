@@ -416,9 +416,9 @@ if __name__ == "__main__":
     
     * After each run, inspect the **token count** at the bottom of the response (see image below). Note the differences in token size when RAG is turned off and on as well as the size and complexity of the prompt. Review the [Snowflake model restrictions](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#model-restrictions) and [cost considerations](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#cost-considerations) to understand more about these models, token inputs, and token costs.
 
-## Example prompt 1:
+## Example prompt 1: Create Winery/Vineyard Overview
 ```
-Provide a comprehensive overview of the following winery:
+Create a comprehensive overview of the following winery:
 
 **Winery Name:** Kohlleffel Vineyards
 
@@ -453,7 +453,7 @@ The overview should include:
 Structure the response with clear headings and an inviting tone tailored to wine enthusiasts or travelers. Include any quirky, fun, or unexpected details that make the winery stand out.
 ```
 
-## Example prompt 2: 
+## Example prompt 2: Create Detailed Trip Itinerary
 
 ```
 Create a detailed and engaging travel guide for a 2-day wine country getaway, complete with a catchy itinerary name. The trip should include the following winery visits:
