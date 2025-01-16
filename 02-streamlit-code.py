@@ -111,7 +111,7 @@ def build_prompt (question):
         context_cmd = f"""
           with context_cte as
           (select winery_or_vineyard, winery_information as winery_chunk, vector_cosine_similarity(winery_embedding,
-                snowflake.cortex.embed_text_768('e5-base-v2', ?)) as v_sim
+                snowflake.cortex.embed_text_1024('snowflake-arctic-embed-l-v2.0', ?)) as v_sim
           from vineyard_data_vectors
           having v_sim > 0
           order by v_sim desc

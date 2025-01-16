@@ -85,11 +85,11 @@ CREATE OR REPLACE TABLE vineyard_data_single_string AS
     ) AS winery_information
     FROM california_wine_country_visits;
 
-/** Transformation #2 - Using the Snowflake Cortex embed_text_768 LLM function, this transformation creates embeddings from the newly created vineyard_data_single_string table and creates a vector table called winery_embedding.
+/** Transformation #2 - Using the Snowflake Cortex EMBED_TEXT_1024 LLM function, this transformation creates embeddings from the newly created vineyard_data_single_string table and creates a vector table called winery_embedding.
 /** Create the vector table from the wine review single field table **/
       CREATE or REPLACE TABLE vineyard_data_vectors AS 
             SELECT winery_or_vineyard, winery_information, 
-            snowflake.cortex.EMBED_TEXT_768('e5-base-v2', winery_information) as WINERY_EMBEDDING 
+            snowflake.cortex.EMBED_TEXT_1024('snowflake-arctic-embed-l-v2.0', winery_information) as WINERY_EMBEDDING 
             FROM vineyard_data_single_string;
 
 /** Select a control record to see the LLM-friendly "text" document table and the embeddings table **/
@@ -104,11 +104,11 @@ CREATE OR REPLACE TABLE vineyard_data_single_string AS
 * This will create your embeddings and a vector table that will be referenced later by Cortex LLM functions and your Streamlit application
 
 ```sql
-/** Transformation #2 - Using the Snowflake Cortex embed_text_768 LLM function, this transformation creates embeddings from the newly created vineyard_data_single_string table and creates a vector table called winery_embedding.
+/** Transformation #2 - Using the Snowflake Cortex EMBED_TEXT_1024 LLM function, this transformation creates embeddings from the newly created vineyard_data_single_string table and creates a vector table called winery_embedding.
 /** Create the vector table from the wine review single field table **/
       CREATE or REPLACE TABLE vineyard_data_vectors AS 
             SELECT winery_or_vineyard, winery_information, 
-            snowflake.cortex.EMBED_TEXT_768('e5-base-v2', winery_information) as WINERY_EMBEDDING 
+            snowflake.cortex.EMBED_TEXT_1024('snowflake-arctic-embed-l-v2.0', winery_information) as WINERY_EMBEDDING 
             FROM vineyard_data_single_string;
 ```
 
@@ -244,7 +244,7 @@ def build_prompt (question):
         context_cmd = f"""
           with context_cte as
           (select winery_or_vineyard, winery_information as winery_chunk, vector_cosine_similarity(winery_embedding,
-                snowflake.cortex.embed_text_768('e5-base-v2', ?)) as v_sim
+                snowflake.cortex.embed_text_1024('snowflake-arctic-embed-l-v2.0', ?)) as v_sim
           from vineyard_data_vectors
           having v_sim > 0
           order by v_sim desc
