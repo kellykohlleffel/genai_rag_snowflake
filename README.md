@@ -24,23 +24,23 @@ This repo provides the high-level steps to create a RAG-based, Gen AI travel ass
 
 ### STEP 1: Create a Fivetran connector to Snowflake
 
-* **Source**: Google Cloud PostgreSQL (G1 instance)
-* **Fivetran Destination**: SNOWFLAKE_LLM_LAB_X
-* **Destination Schema prefix (connector name)**: yourlastname 
-* **Host**: 34.94.122.157 **(NOTE - see the lab guide or your email for credentials and additional host identifiers)**
+* **Source**: `Google Cloud PostgreSQL`
+* **Fivetran Destination**: `SNOWFLAKE_LLM_LAB_X`
+* **Destination Schema prefix (connector name)**: `yourlastname` 
+* **Host**: `34.94.122.157` **(NOTE - see the lab guide or your email for credentials and additional host identifiers)**
 ```
 34.94.122.157
 ```
 * **Data source sync selections:**
-    * **Schema**: agriculture
-    * **Table**: california_wine_country_visits
+    * **Schema**: `agriculture`
+    * **Table**: `california_wine_country_visits`
 
 ### STEP 2: View the new dataset in Snowflake Snowsight
 
 * **Snowflake Account**: **https://dma21732.snowflakecomputing.com** **(NOTE - see the lab guide or your email for credentials)**
-* **Snowflake Database**: HOL_DATABASE
-* **Schema**: yourlastname_agriculture 
-* **Table**: california_wine_country_visits
+* **Snowflake Database**: `HOL_DATABASE`
+* **Schema**: `yourlastname_agriculture`
+* **Table**: `california_wine_country_visits`
 * Click on **Data Preview** to take a look
 
 ### STEP 3: Transform the new structured dataset into a single string to simulate an unstructured document
@@ -50,7 +50,7 @@ This repo provides the high-level steps to create a RAG-based, Gen AI travel ass
 * Highlight only the first transformation script in the editor and click run
 * This will create a new winery_information table using the CONCAT function. Each multi-column record (winery or vineyard) will now be a single string (creates an "unstructured" document for each winery or vineyard)
 
-```
+```sql
 /** Transformation #1 - Create the vineyard_data_single_string table using concat and prefixes for columns (creates an "unstructured" doc for each winery/vineyard)
 /** Create each winery and vineyard review as a single field vs multiple fields **/
 CREATE OR REPLACE TABLE vineyard_data_single_string AS 
@@ -103,7 +103,7 @@ CREATE OR REPLACE TABLE vineyard_data_single_string AS
 * Highlight only the second transformation script in your Snowflake Snowsight worksheet and click run
 * This will create your embeddings and a vector table that will be referenced later by Cortex LLM functions and your Streamlit application
 
-```
+```sql
 /** Transformation #2 - Using the Snowflake Cortex embed_text_768 LLM function, this transformation creates embeddings from the newly created vineyard_data_single_string table and creates a vector table called winery_embedding.
 /** Create the vector table from the wine review single field table **/
       CREATE or REPLACE TABLE vineyard_data_vectors AS 
@@ -116,7 +116,7 @@ CREATE OR REPLACE TABLE vineyard_data_single_string AS
 * Highlight only the third script **SELECT * FROM vineyard_data_vectors WHERE winery_information LIKE '%winery name is Kohlleffel Vineyards%';** in your Snowflake Snowsight worksheet and click run
 * This will show you the complete results of the 2 transformations that you just ran
 
-```
+```sql
 /** Select a control record to see the LLM-friendly "text" document table and the embeddings table **/
     SELECT *
     FROM vineyard_data_vectors
@@ -130,7 +130,7 @@ CREATE OR REPLACE TABLE vineyard_data_single_string AS
 * Click Run to clear the preview pane
 * Copy and paste the [**Streamlit code**](02-streamlit-code.py) in the Streamlit editor
 
-```
+```python
 #
 # Fivetran Snowflake Cortex Streamlit Lab
 # Build a California Wine Country Travel Assistant Chatbot
@@ -169,14 +169,15 @@ def build_layout():
     # Builds the layout for the app side and main panels and return the question from the dynamic text_input control.
     #
 
-    # Setup the state variables.
-    # Ensure `reset_key` is initialized.
-    if 'reset_key' not in st.session_state:
-        st.session_state.reset_key = 0
 
+    # Setup the state variables.
+    # Resets text input ID to enable it to be cleared since currently there is no native clear.
+    if 'reset_key' not in st.session_state: 
+        st.session_state.reset_key = 0
     # Holds the list of responses so the user can see changes while selecting other models and settings.
     if 'conversation_state' not in st.session_state:
         st.session_state.conversation_state = []
+
 
     # Build the layout.
     #
@@ -188,7 +189,7 @@ def build_layout():
       with and powered by Fivetran, Snowflake, Streamlit, and Cortex** and I use a custom, structured dataset!""")
     st.caption("""Let me help plan your trip to California wine country. Using the dataset you just moved into the Snowflake Data 
       Cloud with Fivetran, I'll assist you with winery and vineyard information and provide visit recommendations from numerous 
-      models available in Snowflake Cortex (including Snowflake Arctic). You can even pick the model you want to use or try out 
+      models available in Snowflake Cortex (including Claude 3.5 Sonnet). You can even pick the model you want to use or try out 
       all the models. The dataset includes over **700 wineries and vineyards** across all CA wine-producing regions including the 
       North Coast, Central Coast, Central Valley, South Coast and various AVAs sub-AVAs. Let's get started!""")
     user_question_placeholder = "Message your personal CA Wine Country Visit Assistant..."
@@ -196,10 +197,9 @@ def build_layout():
     st.sidebar.checkbox('Use your Fivetran dataset as context?', key="dataset_context", help="""This turns on RAG where the 
     data replicated by Fivetran and curated in Snowflake will be used to add to the context of the LLM prompt.""")
     if st.button('Reset conversation', key='reset_conversation_button'):
-        st.session_state.reset_key += 1
         st.session_state.conversation_state = []
-        # Update query params to trigger reload.
-        st.query_params.clear()
+        st.session_state.reset_key += 1
+        st.rerun()
     processing_placeholder = st.empty()
     question = st.text_input("", placeholder=user_question_placeholder, key=f"text_input_{st.session_state.reset_key}", 
                              label_visibility="collapsed")
@@ -227,9 +227,9 @@ def build_layout():
     with caption_col2:
         st.caption("Fivetran, Snowflake, Streamlit, & Cortex")
 
+
     return question
 
-    
 
 def build_prompt (question):
     #
@@ -417,7 +417,7 @@ if __name__ == "__main__":
     * After each run, inspect the **token count** at the bottom of the response (see image below). Note the differences in token size when RAG is turned off and on as well as the size and complexity of the prompt. Review the [Snowflake model restrictions](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#model-restrictions) and [cost considerations](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#cost-considerations) to understand more about these models, token inputs, and token costs.
 
 ## Example prompt 1: Create Winery/Vineyard Overview
-```
+```text
 Create a comprehensive overview of the following winery:
 
 **Winery Name:** Kohlleffel Vineyards
@@ -455,7 +455,7 @@ Structure the response with clear headings and an inviting tone tailored to wine
 
 ## Example prompt 2: Create Detailed Trip Itinerary
 
-```
+```text
 Create a detailed and engaging travel guide for a 2-day wine country getaway, complete with a catchy itinerary name. The trip should include the following winery visits:
 
 - **Day 1:** Kohlleffel Vineyards and Millman Estate.

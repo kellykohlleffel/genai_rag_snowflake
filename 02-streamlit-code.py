@@ -56,7 +56,7 @@ def build_layout():
       with and powered by Fivetran, Snowflake, Streamlit, and Cortex** and I use a custom, structured dataset!""")
     st.caption("""Let me help plan your trip to California wine country. Using the dataset you just moved into the Snowflake Data 
       Cloud with Fivetran, I'll assist you with winery and vineyard information and provide visit recommendations from numerous 
-      models available in Snowflake Cortex (including Snowflake Arctic). You can even pick the model you want to use or try out 
+      models available in Snowflake Cortex (including Claude 3.5 Sonnet). You can even pick the model you want to use or try out 
       all the models. The dataset includes over **700 wineries and vineyards** across all CA wine-producing regions including the 
       North Coast, Central Coast, Central Valley, South Coast and various AVAs sub-AVAs. Let's get started!""")
     user_question_placeholder = "Message your personal CA Wine Country Visit Assistant..."
@@ -66,7 +66,7 @@ def build_layout():
     if st.button('Reset conversation', key='reset_conversation_button'):
         st.session_state.conversation_state = []
         st.session_state.reset_key += 1
-        st.experimental_rerun()
+        st.rerun()
     processing_placeholder = st.empty()
     question = st.text_input("", placeholder=user_question_placeholder, key=f"text_input_{st.session_state.reset_key}", 
                              label_visibility="collapsed")
@@ -80,7 +80,7 @@ def build_layout():
         st.selectbox("Select number of context chunks:", CHUNK_NUMBER, key="num_retrieved_chunks", help="""Adjust based on the 
         expected number of records/chunks of your data to be sent with the prompt before Cortext calls the LLM.""", index=1)
     st.sidebar.caption("""I use **Snowflake Cortex** which provides instant access to industry-leading large language models (LLMs), 
-      including **Snowflake Arctic**, trained by researchers at companies like Mistral, Meta, Google, Reka, and Snowflake.\n\nCortex 
+      including Claude, Llama, and Snowflake Arctic that have been trained by researchers at companies like Anthropic, Meta, Mistral, Google, Reka, and Snowflake.\n\nCortex 
       also offers models that Snowflake has fine-tuned for specific use cases. Since these LLMs are fully hosted and managed by 
       Snowflake, using them requires no setup. My data stays within Snowflake, giving me the performance, scalability, and governance 
       you expect.""")
