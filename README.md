@@ -418,7 +418,7 @@ if __name__ == "__main__":
 
 ## Example prompt 1: Create Winery/Vineyard Overview
 ```text
-Create a comprehensive overview of the following winery:
+Create a well-formatted comprehensive overview of the following winery:
 
 **Winery Name:** Kohlleffel Vineyards
 
@@ -456,7 +456,7 @@ Structure the response with clear headings and an inviting tone tailored to wine
 ## Example prompt 2: Create Detailed Trip Itinerary
 
 ```text
-Create a detailed and engaging travel guide for a 2-day wine country getaway, complete with a catchy itinerary name. The trip should include the following winery visits:
+Create a well-formatted, detailed and engaging travel guide for a 2-day wine country getaway, complete with a catchy itinerary name. The trip should include the following winery visits:
 
 - **Day 1:** Kohlleffel Vineyards and Millman Estate.
 - **Day 2:** Continuum Estate and Del Dotto Vineyards.
